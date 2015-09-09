@@ -1,12 +1,16 @@
-# Authenticator Starter
+# Blogger Demo
+This is the assignment two for the Node JS boot camp. In the project, I built a a blogging platform including features
+like persistent local authentication, account creation, blog posts with unique urls, and comments.
 
 **To run:**
 ```
+-- start mongo db
+mongod
+
+-- start server
+npm install
 npm start
 ```
 
-Here's what we'll be building:
-![Excercise Login Page](http://i.imgur.com/00NLYJA.png)
-
-And after the user is logged in:
-![Excercise TODO App](http://i.imgur.com/8omW2kR.png)
+### Walkthrough
+![Video Walkthrough](walkthrough3.gif)
