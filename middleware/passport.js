@@ -19,9 +19,9 @@ module.exports = (app) => {
         failureFlash: true
     }, nodeifyit(async (email, password) => {
         console.log('start authenticate')
+        email = email.toLowerCase()
         let user
-        if (email.indexOf('@')) {
-            email = email.toLowerCase()
+        if (email.indexOf('@') > 0) {
             user = await User.promise.findOne({email})
         } else {
             let regexp = new RegExp(email, 'i')
@@ -30,7 +30,7 @@ module.exports = (app) => {
             })
         }
 
-        if (!user || email !== user.email) {
+        if (!user) {
             return [false, {message: 'User could not be found'}]
         }
 
