@@ -21,11 +21,11 @@ Time spent: `15 hours`
 ### Optional
 
 - [ ] User can specify a vanity url for their blog 
-- [ ] User's passwords are secured additionally with a blacklist, salt and pepper
+- [x] User's passwords are secured additionally with a blacklist, salt and pepper
 - [ ] User can click "Remember Me" to remain logged in
-- [ ] Users can author blog posts with rich text
+- [x] Users can author blog posts with rich text
 - [ ] Clicking a blog tag redirects to a list of blogs and blog posts with the given tag
-- [ ] Users can include image(s) to be displayed on their blog post
+- [x] Users can include image(s) to be displayed on their blog post
 - [ ] Users can specify a future release date and time to make a blog post visible
 - [ ] Users can rate blog posts, and authors can view the aggregate rating
 - [ ] Users can upvote/downvote comments when logged in

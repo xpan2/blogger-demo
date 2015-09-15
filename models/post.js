@@ -1,8 +1,7 @@
 let mongoose = require('mongoose')
-require('songbird')
 
 let PostSchema = mongoose.Schema({
-    userId: String,
+    username: String,
     title: {
         type: String,
         required: true

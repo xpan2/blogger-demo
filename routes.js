@@ -2,6 +2,7 @@ let then = require('express-then')
 let fs = require('fs')
 let multiparty = require('multiparty')
 let Post = require('./models/post')
+let Blog = require('./models/blog')
 let DataUri = require('datauri')
 
 require('songbird')
@@ -41,9 +42,9 @@ module.exports = (app) => {
     }))
 
     app.get('/profile', isLoggedIn, then (async (req, res) => {
-        let userId = req.user._id
-        console.log('userId = ' + userId)
-        let posts = await Post.promise.find({userId: userId})
+        let username = req.user.username
+        console.log('username = ' + username)
+        let posts = await Post.promise.find({username: username})
         console.log('number of posts', posts.length)
         let dataUri = new DataUri
         let postImages = []
@@ -105,7 +106,7 @@ module.exports = (app) => {
 
         post.title = title
         post.content = content
-        post.userId = req.user._id
+        post.username = req.user.username
         post.lastUpdated = date
 
         await post.save()
@@ -132,4 +133,49 @@ module.exports = (app) => {
         req.logout();
         res.redirect('/');
     })
+
+
+    app.get('/blog/:postId?', then (async (req, res) => {
+        // If postId is provided then show that post, otherwise load all posts
+        let posts;
+        let postId = req.params.postId
+        if (postId) {
+            posts = await Post.promise.find({_id: postId})
+        } else {
+            posts = await Post.promise.find({})
+        }
+
+        console.log('number of posts', posts.length)
+        let dataUri = new DataUri
+        let postsAndBlogs = []
+        for (var i=0; i < posts.length; i++) {
+            let post = posts[i]
+            let blogs = await Blog.promise.find({postId: post._id});
+            let image = dataUri.format('.'+post.image.contentType.split('/').pop(), post.image.data)
+            postsAndBlogs.push({
+                image: `data:${post.image.contentType};base64,${image.base64}`,
+                post: post,
+                blogs: blogs
+            })
+        }
+
+        res.render('blog.ejs', {
+            user: req.user,
+            posts: postsAndBlogs
+        })
+    }))
+
+    app.post('/comment', isLoggedIn, then( async (req, res) => {
+        console.log('req.body: ', req.body)
+        let {username, postId, comment} = req.body
+        let blog = new Blog
+        blog.postId = postId
+        blog.username = username
+        blog.comment = comment
+        blog.created = new Date
+        blog = await blog.save()
+
+        res.redirect('/blog/'+postId)
+        return;
+    }))
 }
